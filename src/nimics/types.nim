@@ -1,32 +1,3 @@
-# nimics
-ICS-file generator. Create an invite.ics file and specify the content.
-
-## How to
-
-```nim
-import nimics
-
-# Create the ICS container
-var ics = newIcsFile()
-
-# Specify the details
-ics.orgName     = "Thomas"
-ics.orgMail     = "thomas@mail.com"
-ics.attendees   = @["t1:t1@t1.com", "t2:t2@t2.com"]
-ics.description = "Let's talk about how awesome Nim is"
-ics.summary     = "Nim talk"
-ics.mstart      = initDateTime(01, mDec, 2020, 12, 00, 00).icsDateTimeConvert()
-ics.mend        = "20201201T133000"
-ics.location    = "Nim HQ"
-
-# Generate the file
-icsGenerate(ics, "myfolder/", "invite.ics")
-```
-
-## Options
-
-When creating a new invite, you can specify the following options:
-```nim
 type
   IcsFile* = ref object of RootObj
     prodid*: string           # Default=Nim ICS creator
@@ -48,4 +19,3 @@ type
     dtstamp*: string          # Meeting created, Default=Current time
     location*: string         # Meeting location
     trigger*: string          # Alarm trigger, default=15M
-```
