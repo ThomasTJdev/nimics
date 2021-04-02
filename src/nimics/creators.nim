@@ -1,11 +1,11 @@
 import
-  md5,
-  strutils,
+  std/md5,
+  std/strutils,
   std/wordwrap
 
 import
-  formatting,
-  types
+  ./formatting,
+  ./types
 
 proc icsCreateMain*(
     prodid,
@@ -27,7 +27,8 @@ proc icsCreateOrganizer*(
   return icsOrganizer.format(name, mail)
 
 proc icsCreateAttendees*(
-    nameAndMail: seq[string]
+    nameAndMail: seq[string],
+    requireResponse: bool
   ): string =
   ## Create attendees block
   ##
@@ -38,7 +39,11 @@ proc icsCreateAttendees*(
   var attendees: string
   for a in nameAndMail:
     let asplit = split(a, ":")
-    attendees.add(icsAttendees.format(asplit[0], asplit[1]) & "\n")
+    attendees.add(icsAttendees.format(
+                    asplit[0],
+                    asplit[1],
+                    toUpperAscii($requireResponse)
+                  ) & "\n")
 
   return attendees
 
@@ -66,11 +71,12 @@ proc icsCreateDetails*(
     priority,
     dtstamp,
     lang,
-    location: string
+    location,
+    sequence: string
   ): string =
   ## Create details block
 
-  return icsDetails.format(tzid, dtstart, dtend, class, priority, dtstamp, lang, location)
+  return icsDetails.format(tzid, dtstart, dtend, class, priority, dtstamp, lang, location, sequence)
 
 proc icsCreateAlarm*(
     trigger: string
@@ -90,7 +96,7 @@ proc icsCreate*(ics: IcsFile): string =
       icsCreateOrganizer(ics.orgName, ics.orgMail)
 
     attendees =
-      icsCreateAttendees(ics.attendees)
+      icsCreateAttendees(ics.attendees, ics.requireResponse)
 
     description =
       icsCreateDescription(ics.lang, ics.description)
@@ -99,11 +105,13 @@ proc icsCreate*(ics: IcsFile): string =
       icsCreateSummary(ics.lang, ics.summary)
 
     uid =
-      icsUid.format(getMD5(main))
+      icsUid.format(
+          (if ics.uid != "": ics.uid else: getMD5(main))
+        )
 
     details =
       icsCreateDetails(ics.mstart, ics.mend, ics.tzid, ics.class, ics.priority,
-                        ics.dtstamp, ics.lang, ics.location)
+                        ics.dtstamp, ics.lang, ics.location, $ics.sequence)
     alarm =
       icsCreateAlarm(ics.trigger)
 

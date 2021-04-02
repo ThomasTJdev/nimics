@@ -1,11 +1,11 @@
 import
-  os,
-  times
+  std/os,
+  std/times
 
 import
-  nimics/creators,
-  nimics/types,
-  nimics/utils
+  ./nimics/creators,
+  ./nimics/types,
+  ./nimics/utils
 
 export
   utils

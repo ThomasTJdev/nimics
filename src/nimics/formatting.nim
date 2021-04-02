@@ -22,7 +22,7 @@ BEGIN:VEVENT
 
   icsOrganizer* = "ORGANIZER;CN=$1:mailto:$2" # Name, Email
 
-  icsAttendees*  = "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=$1:mailto:$2" # Name, Email
+  icsAttendees*  = "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=$3;CN=$1:mailto:$2" # Name, Email
 
   icsDescription* = "DESCRIPTION;LANGUAGE=$1:$2" # Lang (e.g. da-DK), Description
 
@@ -38,7 +38,7 @@ PRIORITY:$5
 DTSTAMP:$6
 TRANSP:OPAQUE
 STATUS:CONFIRMED
-SEQUENCE:3
+SEQUENCE:$9
 LOCATION;LANGUAGE=$7:$8
 """
 
