@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.2.0"
 author        = "ThomasTJdev"
 description   = "Create ICS files for email invites, eg. invite.ics"
 license       = "MIT"
